@@ -1,24 +1,14 @@
-import Nav from "./Nav";
-import Header from "./Header";
-import Home from "./Home";
-import NewPost from "./NewPost";
-import About from "./About";
-import Missing from "./Missing";
-import Footer from './Footer';
-import PostPage from "./PostPage";
-import { Route, Routes} from "react-router-dom";
-import EditePost from "./EditePost";
+import React from 'react'
 import { useState,useEffect, createContext } from "react";
 import { useNavigate } from "react-router-dom";
 import{format} from 'date-fns'
-import api from '../src/API/posts'
-import useWindosSize from "../src/hooks/useWindosSize";
-import useAxiosFetch from "../src/hooks/useAxiosFetch";
+import api from '../API/posts'
+import useWindosSize from "../hooks/useWindosSize";
+import useAxiosFetch from "../hooks/useAxiosFetch";
 
+const DataContext = createContext({})
 
-
-
-function App() {
+export const Datacontext = ({Children} ) => {
      
   const [posts,setPosts]=useState([])
 
@@ -138,30 +128,16 @@ catch(err){
 
 const {width} = useWindosSize() 
 
-
   return (
-    <div className="App">
-      <Header width={width}/>
-      <Nav  search={search} setSearch={setSearch}/>
-      <Routes>
-   
-    <Route path="/" element={<Home searchResult={searchResult}  FetchError={FetchError}  loding={loding} />}/>
-      
-      <Route path="/post" >
-
-      <Route index  element={<NewPost  handlechange={handlechange}  postTitle={handlechange} setPostTitle={setPostTitle} postBody={postBody}  setPostBody={setPostBody}/>}/>
-
-      <Route path=":id" element={<PostPage  posts={posts}  handleDelete={handleDelete}/>}/>
-
-      </Route>
-      <Route path="/editepost/:id" element={<EditePost posts={posts} postEditeTitle={postEditeTitle} postEditeBody={postEditeBody} setPostEditeTitle={setPostEditeTitle} setPostEditeBody={setPostEditeBody} editepostfun={editepostfun} />}/> 
-      <Route path="/about" element={<About/>}/>  
-      <Route path="/*" element={<Missing />} />
-    </Routes>
-   
-    <Footer/>
-    </div>
-  );
+    <DataContext.Provider value={{
+      width ,search , setSearch ,searchResult , FetchError , loding ,
+      handlechange , postTitle , setPostTitle , postBody , setPostBody ,
+      posts,postEditeTitle,postEditeBody,setPostEditeTitle,setPostEditeBody,editepostfun,
+      handleDelete,
+     }}>
+         {Children}
+     </DataContext.Provider>
+  )
 }
 
-export default App;
+export default Datacontext
