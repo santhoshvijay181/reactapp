@@ -8,7 +8,7 @@ import Footer from './Footer';
 import PostPage from "./PostPage";
 import { Route, Routes} from "react-router-dom";
 import EditePost from "./EditePost";
-import { useState,useEffect, createContext } from "react";
+import { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import{format} from 'date-fns'
 import api from '../src/API/posts'
@@ -39,7 +39,7 @@ try{
 
 const responce= await api.post('/posts',newpost)
 const allPost=[...posts,responce.data]
-console.log(allPost,"ena da error vathuducha ?") 
+
 
 setPosts(allPost);
 setPostTitle('');
@@ -47,14 +47,7 @@ setPostBody('')
 navgeter('/')
 }
 catch(err){
-  if (err.responce){
-    console.log(err.responce.data);
-    console.log(err.responce.status);
-    console.log(err.responce.headers);
-  }
-  else{
-    console.log(`Error:${err.message}`)
-  }
+ 
 
 }
 } 
@@ -73,7 +66,7 @@ setPosts(deletepost)
 navgeter('/')
 }
 catch(err){
-  console.log(`Error:${err.message}`)
+ 
 
 }
 
@@ -92,26 +85,6 @@ useEffect( ()=>{
 
 
 
-/*useEffect(()=>{
-  const fetchdata = async () =>{
-    try{
-      const responce= await api.get("/posts");
-      setPosts(responce.data);
-
-    }
-    catch(err){
-     
-     
-        console.log(`Error:${err.message}`)
-      
-
-    }
-  
-  }
-(async()=> await fetchdata())()
-},[posts]
-
-)*/
 
 //api edite put method
 const [postEditeTitle,setPostEditeTitle]=useState('')
@@ -123,7 +96,7 @@ const datetime = format (new Date( ),'MMMM dd,yyyy pp');
 const updatepost = {id ,title:postEditeTitle, datetime, body:postEditeBody};
 try{
 const responce=await api.put(`/posts/${id}`,updatepost)
-console.log(updatepost.data) 
+
 
 setPosts(posts.map(post => post.id===id ? {...responce.data} : post )); 
 setPostEditeTitle('')
@@ -131,7 +104,7 @@ setPostEditeBody('')
 navgeter('/')
 }
 catch(err){
-  console.log(`Error  ${err.message}` )
+  
 }
 }
 //mobile size changing
@@ -149,7 +122,7 @@ const {width} = useWindosSize()
       
       <Route path="/post" >
 
-      <Route index  element={<NewPost  handlechange={handlechange}  postTitle={handlechange} setPostTitle={setPostTitle} postBody={postBody}  setPostBody={setPostBody}/>}/>
+      <Route index  element={<NewPost  handlechange={handlechange}  postTitle={postTitle} setPostTitle={setPostTitle} postBody={postBody}  setPostBody={setPostBody}/>}/>
 
       <Route path=":id" element={<PostPage  posts={posts}  handleDelete={handleDelete}/>}/>
 
